@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -9,6 +10,8 @@
     <title></title>
     <style type="text/css">
         @import url("https://fonts.googleapis.com/css?family=Caveat");
+        @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400");
+
         html,
         body {
             margin: 0;
@@ -58,32 +61,123 @@
             background-position: center bottom;
         }
 
-        /* h1 {
-            font-size: calc(1.5em + 5vw);
-            font-family: "Vibur", cursive;
-            text-align: center;
-            padding: 1em;
-            transform: rotate(-4deg) translateY(-15vh);
-            background: linear-gradient(to right, red, blue);
+        .text-js {
+            opacity: 0;
+        }
+
+        .cursor {
+            display: block;
+            position: absolute;
+            height: 100%;
+            top: 0;
+            right: -5px;
+            width: 2px;
+            z-index: 1;
+            -webkit-animation: flash 0.5s none infinite alternate;
+            animation: flash 0.5s none infinite alternate;
+            background: linear-gradient(#e66465, #9198e5);
+        }
+
+        .headline {
+            margin: 20px;
+            background: linear-gradient(135deg, #00C4FF, #9D1BB2);
             color: transparent;
             -webkit-background-clip: text;
-        } */
+            font-size: 26px;
+            text-align: center;
+        }
+
+        .headline h1 {
+            /* letter-spacing: 1.6px; */
+            font-weight: 300;
+        }
+
+        .twitterLink {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 10px 15px;
+            z-index: 3;
+        }
+
+        .twitterLink svg {
+            width: 25px;
+        }
+
+        .credit {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+            color: white;
+            text-decoration: none;
+        }
+
+        @-webkit-keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes flash {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <!-- 雪花 go-->
-    <!-- content -->
-    <!-- <h1 id="title">
-        <script>document.write((new Date().getFullYear() + 1))</script> 新年快樂！
-    </h1> -->
-    <canvas id="newYear"></canvas>
+    <div class="type-js headline">
+        <h1 class="text-js">Look mum, I'm typing!</h1>
+    </div>
+    <video autoplay="true" name="media"><source src="http://m801.music.126.net/20201231163539/ad2748a9b17fb4487b38eecd59f2ce62/jdymusic/obj/w5zDlMODwrDDiGjCn8Ky/1497471810/ae4f/3676/98a8/c98c5b9f5350b8dcb34dfb81f94e73ec.mp3" type="audio/mpeg"></video>
+    <canvas style="margin-top: -170px;" id="newYear"></canvas>
     <div class="landscape"></div>
     <div class="filter"></div>
     <canvas id="canvas"></canvas>
-    <!-- 雪花 end-->
     <script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript">
+        function autoType(elementClass, typingSpeed) {
+            var thhis = $(elementClass);
+            thhis.css({
+                "position": "relative",
+                "display": "inline-block"
+            });
+            thhis.prepend('<div class="cursor" style="right: initial; left:0;"></div>');
+            thhis = thhis.find(".text-js");
+            var text = thhis.text().trim().split('');
+            var amntOfChars = text.length;
+            var newString = "";
+            thhis.text("|");
+            setTimeout(function () {
+                thhis.css("opacity", 1);
+                thhis.prev().removeAttr("style");
+                thhis.text("");
+                for (var i = 0; i < amntOfChars; i++) {
+                    (function (i, char) {
+                        setTimeout(function () {
+                            newString += char;
+                            thhis.text(newString);
+                        }, i * typingSpeed);
+                    })(i + 1, text[i]);
+                }
+            }, 1500);
+        }
+
+        $(document).ready(function () {   
+            autoType(".type-js", 200);
+        });
+
         function Star(id, x, y) {
             this.id = id;
             this.x = x;
